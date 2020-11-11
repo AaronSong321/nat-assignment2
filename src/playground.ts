@@ -73,6 +73,8 @@ let INPUTS: {[name: string]: InputFeature} = {
   "xTimesY": {f: (x, y) => x * y, label: "X_1X_2"},
   "sinX": {f: (x, y) => Math.sin(x), label: "sin(X_1)"},
   "sinY": {f: (x, y) => Math.sin(y), label: "sin(X_2)"},
+  // "xCubed":{f:(x,y)=>x*x*x, label:"X_1^3"},
+  // "yCubed":{f:(_,y)=>y*y*y, label:"Y_1^3"},
 };
 
 let HIDABLE_CONTROLS = [
@@ -168,7 +170,8 @@ let linkWidthScale = d3.scale.linear()
   .clamp(true);
 let colorScale = d3.scale.linear<string, number>()
                      .domain([-1, 0, 1])
-                     .range(["#f59322", "#e8eaeb", "#0877bd"])
+                     .range(["#f59" +
+                     "322", "#e8eaeb", "#0877bd"])
                      .clamp(true);
 let iter = 0;
 let PSOout = 0;
@@ -182,7 +185,17 @@ let player = new Player();
 let lineChart = new AppendingLineChart(d3.select("#linechart"),
     ["#777", "black"]);
 
+
+function PlayGA(){
+
+}
+
+
 function makeGUI() {
+  d3.select("#play-button").on("click",function() {
+    PlayGA()
+  })
+
   d3.select("#reset-button").on("click", () => {
     reset();
     userHasInteracted();
@@ -222,6 +235,7 @@ function makeGUI() {
       return; // No-op.
     }
     state.dataset =  newDataset;
+
     dataThumbnails.classed("selected", false);
     d3.select(this).classed("selected", true);
     generateData();

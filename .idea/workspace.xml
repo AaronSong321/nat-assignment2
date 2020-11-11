@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fd431062-f319-46ea-ac89-355c65854bfb" name="Default Changelist" comment="" />
+    <list default="true" id="fd431062-f319-46ea-ac89-355c65854bfb" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/playground.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/playground.ts" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1jpAwXloSb9mXvgs3bYuT0uKTdD" />
   <component name="ProjectViewState">
@@ -30,7 +37,9 @@
       <updated>1604490898860</updated>
       <workItem from="1604490900044" duration="9824000" />
       <workItem from="1604548422600" duration="20547000" />
-      <workItem from="1604752140127" duration="7063000" />
+      <workItem from="1604752140127" duration="8750000" />
+      <workItem from="1604869622519" duration="821000" />
+      <workItem from="1604885741069" duration="6513000" />
     </task>
     <servers />
   </component>
@@ -42,5 +51,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="720" y="370" width="943" height="349" key="#com.intellij.structuralsearch.plugin.ui.StructuralSearchDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604497843011" />
+    <state x="883" y="178" width="585" height="801" key="find.popup" timestamp="1604915742695">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="883" y="178" width="585" height="801" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604915742695" />
   </component>
 </project>
