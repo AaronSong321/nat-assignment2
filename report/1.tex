@@ -2,6 +2,7 @@
 \usepackage{graphicx}
 \usepackage{enumerate}
 \usepackage{booktabs}
+\usepackage{amsmath}
 \usepackage[T1]{fontenc}
 \author{Aaron Song s267807}
 \title{CW2}
@@ -154,11 +155,103 @@ This is not implemented in the Playground, but it might have some influence. If 
 \end{description}
 
 \section{Task 2}
-1. There're seven input nodes so the encoding of the input layer would be a binary string with a length of 7; the maximum number of layers is 6 and on each layer the limit of the number of neurons is 8, so a layer can be encoded in a binary string with a length of 3. In the first layer (also the input layer), every node is different because each one represents a different input function (it is however possible to have to input nodes with the same function, but it would be meaningless); for other layers, every node (neuron) is the same. So the neural network can be represented as:
+There're seven input nodes so the encoding of the input layer would be a binary string with a length of 7; the maximum number of layers is 6 and on each layer the limit of the number of neurons is 8, so a layer can be encoded in a binary string with a length of 3. In the first layer (also the input layer), every node is different because each one represents a different input function (it is however possible to have to input nodes with the same function, but it would be meaningless); for other layers, every node (neuron) is the same. So the neural network can be represented as:
 $$
 {i_0i_1\ldots i_7,\ l_{1_0}l_{1_1}l_{1_2},\ l_{5_0}l_{5_1}l_{5_2},\ \ldots,\ l_{6_0}l_{6_1}l_{6_2}}
 $$
-. 
 
+\subsection{Genetic Algorithm Design}
+\begin{description}
+\item[Encoding: ]
+
+To further limit the search space, the input layer is encoded as 3 binary digits. The first digit stands for the combination of [x1,x2], the second is [sin(x1), sin(x2)] and the third is[$x_1^2$,$x_2^2$] respectively. The hidden layer is restricted to a maximum of 4 layers, with a maximum of 7 neurons per layer.\\
+Therefore, the binary encoding has a length of 15. 
+\[
+{i_0i_1i_2,\ l_{1_0}l_{1_1}l_{1_2},\ l_{2_0}l_{2_1}l_{2_2},\ l_{3_0}l_{3_1}l_{3_2},\ l_{4_0}l_{4_1}l_{4_2}}
+\]
+\end{description}
+
+\begin{description}
+\item[Fitness Function: ]
+\[
+fitness = \exp(\frac1{\text{Test\_Loss} \sqrt[4]{N_n}})
+\]
+where $N_n$ is the total number of neurons in the hidden layers.
+
+Fitness function is defined as the exponential of the reciprocal of test loss times the total number of neurons in the hidden layers. The test loss is in range 0 to 1. The exponential term is to make the fitness function has a significant change even when the test loss is small. As we prefer simple models, the neuron count term is to act as the penalty for complexity. To avoid the population being misled by an individual with a simple shape and high test loss, the square term is introduced to reduce the weight of the number of neurons.
+
+\end{description}
+
+\begin{description}
+\item[Selection: ]
+Roulette wheel selection is implemented. The individual with higher fitness has more chance of being selected to the mating pool. The same individual can occur more than once in the pool.\\
+
+Also, there are elitisms in each generation. 
+Elitism involves replicating a small group of the fittest candidates to the next generation with out mutation. It allows the GA to converge even fasters.
+
+
+\end{description}
+\begin{description}
+\item[Mutation: ]
+All individuals in the mating pool will perform mutation.
+Two types of mutation are implemented, bit flip mutation and swap mutation. 
+Bit Flip Mutation: Iterate through all bits in the chromosome, each bit has a probability of $p_m$ to flip.\\
+Swap Mutation: A chromosome has the probability $p_m$ to randomly select two bits, and interchange the values.\\
+No crossover is used as it involves too much diversity, and does not lead to converge of fitness.
+\end{description}
+
+\subsection{Implementation and Experiment}
+Neural Network Playground is used as a part of fitness function to evaluate the test loss with the given structure of the network, and a separate python program is used for the GA process.
+Headless chrome browser is used to interact with the Playground. For each shape configuration, run the neural network in the Playground for five times, compute the average test loss. Each run is limited to 2 seconds, which gives some plenty to complex structure.
+
+\subsection{Experiment}
+The parameter of the Playground and GA is shown in table \ref{t_p} and \ref{t_g}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ccccc}
+\toprule
+Activation  & Batch Size & Weight Update & Learning Rate & Regularization \\ \midrule
+Tanh & 10 & SGD & 0.03 & None  \\
+\bottomrule
+\end{tabular}
+\caption{Playground parameters}
+\label{t_p}
+\end{table}
+\begin{table}[h]
+\centering
+\begin{tabular}{cccc}
+\toprule
+Search Space Dimension & Population Size  & Mutation Probability & Elitism  \\ \midrule
+15 & 10 & 0.3 & 2   \\
+\bottomrule
+\end{tabular}
+\caption{GA parameters}
+\label{t_g}
+\end{table}
+
+As table \ref{t_res} shows, the maximum fitness increases during the evolution, and individuals have the trend to evolve to lower loss and less neuron. There is no one global optimum, a number of shape combinations can achieve very low test loss. Each run may give different results. In the playground, the network with input node \{x,y,sin(x),sin(y)\} and hidden layer [6,4] can achieve a minimal test loss of 0.005.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ccccc}
+\toprule
+Gen.  & Max $\log$(Fitness) & Optimal Shape & Input Node  \\ \midrule
+1 & 4.22 & [6,2,4,4]&\{x,y,sin(x),sin(y)\}  \\
+2 & 4.21 & [7,3,7,1]&\{x,y,sin(x),sin(y),$x^2$,$y^2$\}   \\
+3 & 3.83 & [6,2,4,4]&\{x,y,sin(x),sin(y)\}   \\
+4 & 4.23 & [6,4,2]&\{x,y,$x^2$,$y^2$\}    \\
+5 & 7.18 & [6,2,4,4]&\{x,y,sin(x),sin(y)\}   \\
+6 & 5.98 & [6,4,2]&\{x,y,$x^2$,$y^2$,sin(x),sin(y)\}    \\
+7 & 3.31 & [6,4,2]&\{x,y,$x^2$,$y^2$,sin(x),sin(y)\}   \\
+8 & 10.73 & [6,4]&\{$x^2$,$y^2$,sin(x),sin(y)\}    \\
+9 & 14.87 & [6,4]&\{x,y,sin(x),sin(y)\}     \\
+10 & 15.97 & [6,4]&\{x,y,sin(x),sin(y)\}    \\
+\bottomrule
+\end{tabular}
+\caption{Result of GA}
+\label{t_res}
+
+\end{table}
 
 \end{document}
