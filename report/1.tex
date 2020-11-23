@@ -3,10 +3,14 @@
 \usepackage{enumerate}
 \usepackage{booktabs}
 \usepackage{amsmath}
+\usepackage{geometry}
+
 \usepackage[T1]{fontenc}
-\author{Aaron Song s267807}
+\geometry{a4paper,left=3cm,right=3cm,top=2cm,bottom=2cm}
+\author{Aaron Song s2067807\\Tianchang Li s2057007}
 \title{CW2}
 \date{\today}
+
 
 
 \begin{document}
@@ -253,5 +257,70 @@ Gen.  & Max $\log$(Fitness) & Optimal Shape & Input Node  \\ \midrule
 \label{t_res}
 
 \end{table}
+\newpage
+\section{Task 3}
+\subsection{Genetic Programming Design}
+The Playground is modified so that the activation function of each layer can be controled individually.
+The GP tree represents the shape of the network and action function of each layer.
 
+For example, Figure \ref{gptree} shows a GP Tree with 2 input nodes, a hidden layer with 3 neurons and a hidden layer with 4 neurons. The activation function for input layer and two hidden layers are ReLU, Tanh, and Sigmoid respectively.
+\begin{figure}
+\centering
+    \includegraphics[width=0.7\textwidth]{GPTREE.png}
+    \caption{GP Tree Example}
+    \label{gptree}
+\end{figure}
+\begin{description}
+\item[Terminals: ]
+The number of neurons in the layer, ranging from 1 to 7, including input and hidden layer. For input layer, the number is three digits in binary. Similar to GA, each digit represents a combination of input node.
+\end{description}
+\begin{description}
+\item[Functions: ]
+Activation functions of each layer, including Tanh, ReLU and Sigmoid. For simlicity, only three activation functions are considered.
+\end{description}
+
+\begin{description}
+\item[Fitness function: ]
+Similar to GA
+\[
+fitness = \exp(\frac1{\text{Test\_Loss}})
+\]
+
+\end{description}
+
+\begin{description}
+\item[Parameters: ]
+\end{description}
+\begin{center}
+\begin{tabular}{ccccc}
+\toprule
+Population & Depth & Tournament Size & crossover rate & Mutation Probability \\ \midrule
+12 & 2 to 4 & 5 & 0.8 & 0.2  \\
+\bottomrule
+\end{tabular}
+\end{center}
+\subsection{Results}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ccccc}
+\toprule
+Gen.  & Max $\log$(Fitness) & Shape & Input Node  &Activation \\ \midrule
+1 & 1.2 & [1,7]&\{x,y,sin(x),sin(y),$x^2$,$y^2$\} &sigmoid,relu,sigmoid \\
+2 & 2.3 & [4,4]&\{sin(x),sin(y),$x^2$,$y^2$\} &tanh,tanh,sigmoid  \\
+3 & 3.4 & [4,4]&\{sin(x),sin(y),$x^2$,$y^2$\} &tanh,tanh,sigmoid  \\
+4 & 3.0 & [5]&\{x,y,$x^2$,$y^2$\} &tanh,sigmoid   \\
+5 & 2.9 & [6,4]&\{x,y,$x^2$,$y^2$\} &sigmoid,relu,sigmoid  \\
+6 & 4.4 & [6,4]&\{x,y,$x^2$,$y^2$\}  &sigmoid,relu,sigmoid  \\
+7 & 4.1 & [7,6,3,6]&\{$x^2$,$y^2$,sin(x),sin(y)\} &tanh,tanh,relu,relu,relu  \\
+8 & 3.1 & [6,3,6]&\{$x^2$,$y^2$,sin(x),sin(y)\}&tanh,relu,relu,relu    \\
+9 & 6.9 & [6,4,2,6]&\{x,y,sin(x),sin(y),$x^2$,$y^2$\}  &relu,tanh,tanh,relu,relu   \\
+10 & 4.0 & [6,2]&\{x,y,$x^2$,$y^2$\}  &sigmoid,sigmoid,tanh  \\
+\bottomrule
+\end{tabular}
+\caption{Result of GP}
+\label{t_res}
+
+\end{table}
+The result is not as good as expected. The possible reason are that for the same structure, the test loss of Playground cannot maintain consistency, the population is not large and the generations is not enough.
 \end{document}
